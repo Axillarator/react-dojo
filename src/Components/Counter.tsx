@@ -1,24 +1,24 @@
-import React, {useState} from 'react';
+import React, {MouseEventHandler} from 'react';
 
-const Counter: React.FC = () => {
+interface Props {
+    count:number
+    resetCountToZero: MouseEventHandler
+    createAdderFunction: (amount:number) => MouseEventHandler
+}
 
-  const [currentCount, updateCount] = useState(0);
+const Counter: React.FC<Props> = (props:Props) => {
 
-  const resetCountToZero = () => {
-    updateCount(0)
-  };
+    const addOne = props.createAdderFunction(1);
+    const addFive = props.createAdderFunction(5);
+    const addEight = props.createAdderFunction(8);
 
-  const addToCount = (amount: number) => {
-    return () => updateCount(currentCount + amount);
-  };
-
-  return (
+    return (
     <div>
-      <p>Counter {currentCount}</p>
-      <button onClick={resetCountToZero} >Reset</button>
-      <button onClick={addToCount(1)} > +1 </button>
-      <button onClick={addToCount(5)} > +5 </button>
-      <button onClick={addToCount(8)} > +8 </button>
+      <p>Counter {props.count}</p>
+      <button onClick={props.resetCountToZero} >Reset</button>
+      <button onClick={addOne} > +1 </button>
+      <button onClick={addFive} > +5 </button>
+      <button onClick={addEight} > +8 </button>
     </div>
   );
 };
