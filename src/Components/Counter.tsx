@@ -19,9 +19,9 @@ const Counter: React.FC<Props> = (props: Props) => {
         <div>
             <p>Counter {props.count}</p>
             <button onClick={props.resetCountToZero}>Reset</button>
-            <button onClick={addOne}> adding {props.sign}</button>
-            <button onClick={addFive}> adding {props.sign * 5}</button>
-            <button onClick={addEight}> adding {props.sign * 8}</button>
+            <button onClick={addOne}> {props.sign > 0 ? "+": ""}{props.sign}</button>
+            <button onClick={addFive}> {props.sign > 0 ? "+": ""}{props.sign*5}</button>
+            <button onClick={addEight}> {props.sign > 0 ? "+": ""}{props.sign*8}</button>
             <button onClick={props.swapSign}> +/-</button>
             <button onClick={props.removeCounter}> delete</button>
         </div>
