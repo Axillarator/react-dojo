@@ -6,7 +6,7 @@ const App : React.FC = () => {
 
     const [arrayOfCounts, updateCount] = useState([0,0]);
 
-    const createAdder = (index: number) => {
+    const createAddHandler = (index: number) => {
         return (amount: number): MouseEventHandler => {
             return () => {
                 let result = [...arrayOfCounts];
@@ -24,16 +24,22 @@ const App : React.FC = () => {
         };
     };
 
-
     function resetAllCounters() {
-        updateCount([0,0])
+        let result = [...arrayOfCounts];
+        updateCount(result.map(() => 0));
+    }
+
+    function addCounter() {
+        let result = [...arrayOfCounts];
+        result.push(0);
+        updateCount(result);
     }
 
     return (
         <div>
             <button onClick={resetAllCounters}> reset All </button>
-            <Counter count={arrayOfCounts[0]} createAdderFunction={createAdder(0)} resetCountToZero={resetHandler(0)}/>
-            <Counter count={arrayOfCounts[1]} createAdderFunction={createAdder(1)} resetCountToZero={resetHandler(1)}/>
+            <button onClick={addCounter}> Add new counter </button>
+            {arrayOfCounts.map((value, index) => <Counter key={index} count={value} createAdderFunction={createAddHandler(index)} resetCountToZero={resetHandler(index)}/>)}
         </div>
     );
 
