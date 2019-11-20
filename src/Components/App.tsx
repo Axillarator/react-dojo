@@ -4,33 +4,32 @@ import {MouseEventHandler, useState} from "react";
 
 const App : React.FC = () => {
 
-    const [currentCount1, updateCount1] = useState(0);
-    const [currentCount2, updateCount2] = useState(0);
+    const [arrayOfCounts, updateCount] = useState([0,0]);
 
     const createAdder1 = (amount: number): MouseEventHandler => {
-        return () => updateCount1(currentCount1 + amount);
+        return () => updateCount([arrayOfCounts[0] + amount, arrayOfCounts[1]]);
     };
     const createAdder2 = (amount: number) => {
-        return () => updateCount2(currentCount2 + amount);
+        return () => updateCount([arrayOfCounts[0], arrayOfCounts[1] + amount]);
     };
 
     const resetCountToZero1 = () => {
-        updateCount1(0)
+        updateCount([0, arrayOfCounts[1]])
     };
+
     const resetCountToZero2 = () => {
-        updateCount2(0)
+        updateCount([arrayOfCounts[0],0])
     };
 
     function resetAllCounters() {
-        updateCount1(0);
-        updateCount2(0);
+        updateCount([0,0])
     }
 
     return (
         <div>
             <button onClick={resetAllCounters}> reset All </button>
-            <Counter count={currentCount1} createAdderFunction={createAdder1} resetCountToZero={resetCountToZero1}/>
-            <Counter count={currentCount2} createAdderFunction={createAdder2} resetCountToZero={resetCountToZero2}/>
+            <Counter count={arrayOfCounts[0]} createAdderFunction={createAdder1} resetCountToZero={resetCountToZero1}/>
+            <Counter count={arrayOfCounts[1]} createAdderFunction={createAdder2} resetCountToZero={resetCountToZero2}/>
         </div>
     );
 
