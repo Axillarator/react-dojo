@@ -4,6 +4,7 @@ interface Props {
     count:number
     resetCountToZero: MouseEventHandler
     createAdderFunction: (amount:number) => MouseEventHandler
+    removeCounter: MouseEventHandler
 }
 
 const Counter: React.FC<Props> = (props:Props) => {
@@ -19,6 +20,7 @@ const Counter: React.FC<Props> = (props:Props) => {
       <button onClick={addOne} > +1 </button>
       <button onClick={addFive} > +5 </button>
       <button onClick={addEight} > +8 </button>
+      <button onClick={props.removeCounter}> delete </button>
     </div>
   );
 };
