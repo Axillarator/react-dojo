@@ -2,15 +2,20 @@ import * as React from "react";
 import Counter from "./Counter";
 import {MouseEventHandler, useState} from "react";
 
+interface CounterState {
+    countValue: number,
+    sign: number
+}
+
 const App: React.FC = () => {
 
-    const [arrayOfCounts, updateCount] = useState([0, 0]);
+    const [arrayOfCounts, updateCount] = useState<CounterState[]>([{countValue:0,sign:1}, {countValue:0,sign:1}]);
 
     const createAddHandler = (index: number) => {
         return (amount: number): MouseEventHandler => {
             return () => {
                 let result = [...arrayOfCounts];
-                result[index] = result[index] + amount;
+                result[index].countValue = result[index].countValue + amount;
                 updateCount(result);
             }
         }
@@ -19,19 +24,19 @@ const App: React.FC = () => {
     const resetHandler = (index: number) => {
         return () => {
             let result = [...arrayOfCounts];
-            result[index] = 0;
+            result[index].countValue = 0;
             updateCount(result);
         };
     };
 
-    function resetAllCounters() {
+    function resetAll() {
         let result = [...arrayOfCounts];
-        updateCount(result.map(() => 0));
+        updateCount(result.map(() => {return{countValue:0, sign:1}}));
     }
 
     function addCounter() {
         let result = [...arrayOfCounts];
-        result.push(0);
+        result.push({countValue:0, sign:1});
         updateCount(result);
     }
 
@@ -42,14 +47,24 @@ const App: React.FC = () => {
         }
     }
 
+    function swapHandler(index: number) {
+        return () => {
+            let result = [...arrayOfCounts];
+            result[index].sign = result[index].sign * (-1);
+            updateCount(result);
+        };
+    }
+
     return (
         <div>
-            <button onClick={resetAllCounters}> reset All</button>
+            <button onClick={resetAll}> reset All</button>
             <button onClick={addCounter}> Add new counter</button>
-            {arrayOfCounts.map((value, index) => <Counter key={index} count={value}
+            {arrayOfCounts.map((element, index) => <Counter key={index} count={element.countValue}
                                                           createAdderFunction={createAddHandler(index)}
                                                           resetCountToZero={resetHandler(index)}
-                                                          removeCounter={removeHandler(index)}/>)}
+                                                          removeCounter={removeHandler(index)}
+                                                          sign={element.sign}
+                                                          swapSign={swapHandler(index)}/>)}
         </div>
     );
 
