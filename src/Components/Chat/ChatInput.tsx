@@ -25,7 +25,6 @@ export default function ChatInput(props: Props) {
                 placeholder="Nachricht"
                 variant="outlined"
                 multiline
-                rowsMax={5}
                 value={props.value}
                 onChange={props.handleChange}
                 onKeyPress={catchEnter}
