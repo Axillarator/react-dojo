@@ -1,14 +1,26 @@
 import * as React from "react";
 import Counter from "./Counter";
 import {MouseEventHandler, useState} from "react";
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 interface CounterState {
     countValue: number,
     sign: number
 }
 
-const App: React.FC = () => {
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            padding: theme.spacing(3, 2),
+        },
+    }),
+);
 
+const CounterApp: React.FC = () => {
+
+    const classes = useStyles();
     const [arrayOfCounts, updateCount] = useState<CounterState[]>([{countValue:0,sign:1}, {countValue:0,sign:1}]);
 
     const createAddHandler = (index: number) => {
@@ -56,18 +68,18 @@ const App: React.FC = () => {
     }
 
     return (
-        <div>
-            <button onClick={resetAll}> reset All</button>
-            <button onClick={addCounter}> Add new counter</button>
+        <Paper className={classes.root}>
+            <Button onClick={resetAll} variant="contained" color="secondary"> reset All</Button>
+            <Button onClick={addCounter} variant="contained" color="primary"> Add new counter</Button>
             {arrayOfCounts.map((element, index) => <Counter key={index} count={element.countValue}
                                                           createAdderFunction={createAddHandler(index)}
                                                           resetCountToZero={resetHandler(index)}
                                                           removeCounter={removeHandler(index)}
                                                           sign={element.sign}
                                                           swapSign={swapHandler(index)}/>)}
-        </div>
+        </Paper>
     );
 
 };
 
-export default App;
+export default CounterApp;

@@ -1,4 +1,6 @@
 import React, {MouseEventHandler} from 'react';
+import Button from '@material-ui/core/Button';
+import {createStyles, makeStyles, Theme} from "@material-ui/core";
 
 interface Props {
     count: number
@@ -9,21 +11,31 @@ interface Props {
     swapSign: MouseEventHandler
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            padding: theme.spacing(1, 1),
+        },
+    }),
+);
+
 const Counter: React.FC<Props> = (props: Props) => {
+
+    const classes = useStyles();
 
     const addOne = props.createAdderFunction(props.sign);
     const addFive = props.createAdderFunction(5 * props.sign);
     const addEight = props.createAdderFunction(8 * props.sign);
 
     return (
-        <div>
-            <p>Counter {props.count}</p>
-            <button onClick={props.resetCountToZero}>Reset</button>
-            <button onClick={addOne}> {props.sign > 0 ? "+": ""}{props.sign}</button>
-            <button onClick={addFive}> {props.sign > 0 ? "+": ""}{props.sign*5}</button>
-            <button onClick={addEight}> {props.sign > 0 ? "+": ""}{props.sign*8}</button>
-            <button onClick={props.swapSign}> +/-</button>
-            <button onClick={props.removeCounter}> delete</button>
+        <div className={classes.root}>
+            <Button variant="contained" disabled >Value: {props.count}</Button>
+            <Button onClick={props.resetCountToZero} variant="outlined" color="primary">Reset</Button>
+            <Button onClick={addOne} variant="outlined" color="primary"> {props.sign > 0 ? "+" : ""}{props.sign}</Button>
+            <Button onClick={addFive} variant="outlined" color="primary"> {props.sign > 0 ? "+" : ""}{props.sign * 5}</Button>
+            <Button onClick={addEight} variant="outlined" color="primary"> {props.sign > 0 ? "+" : ""}{props.sign * 8}</Button>
+            <Button onClick={props.swapSign} variant="contained" color="primary"> +/-</Button>
+            <Button onClick={props.removeCounter} variant="contained" color="secondary"> delete</Button>
         </div>
     );
 };
