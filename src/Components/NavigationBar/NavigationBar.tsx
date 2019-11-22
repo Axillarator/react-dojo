@@ -6,6 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CounterApp from "../CounterApp/CounterApp";
+import ChatApp from "../Chat/ChatApp";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function NavigationBar() {
     const classes = useStyles();
-    const [tabIndex, setTabIndex] = React.useState(0);
+    const [tabIndex, setTabIndex] = React.useState(1);
 
     const handleIndexChange = (event: React.ChangeEvent<{}>, newIndex: number) => {
         setTabIndex(newIndex);
@@ -49,7 +50,7 @@ export default function NavigationBar() {
             <AppBar position="static">
                 <Tabs value={tabIndex} onChange={handleIndexChange}>
                     <Tab label="CounterApp"/>
-                    <Tab label="Item Two"/>
+                    <Tab label="ChatApp"/>
                     <Tab label="Item Three"/>
                 </Tabs>
             </AppBar>
@@ -57,7 +58,7 @@ export default function NavigationBar() {
                 <CounterApp/>
             </TabPanel>
             <TabPanel value={tabIndex} index={1}>
-                Item Two
+                <ChatApp />
             </TabPanel>
             <TabPanel value={tabIndex} index={2}>
                 Item Three
