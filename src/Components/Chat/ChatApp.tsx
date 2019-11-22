@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ChatApp() {
 
     const classes = useStyles();
-    const [arrayOfMessages, updateArray] = useState<Message[]>([]);
+    const [arrayOfMessages, updateMessageHistory] = useState<Message[]>([]);
     const [currentMessage, updateMessage] = useState("");
 
     const handleSend = () => {
@@ -29,7 +29,7 @@ export default function ChatApp() {
 
         let result = [...arrayOfMessages];
         result.push({content: currentMessage, time: timeString});
-        updateArray(result);
+        updateMessageHistory(result);
         updateMessage("")
     };
 
@@ -37,12 +37,20 @@ export default function ChatApp() {
         updateMessage(event.target.value);
     };
 
+    const onDelete = (indexToRemove: number) => {
+        return () => {
+            let result = [...arrayOfMessages];
+            updateMessageHistory(result.filter((value, index) => index !== indexToRemove));
+        };
+    };
+
     return (
 
         <div>
             <Paper className={classes.root}>
                 {arrayOfMessages.map((element, index) => <ChatOutput key={index} message={element.content}
-                                                                     time={element.time}/>)}
+                                                                     time={element.time}
+                                                                     onDelete={onDelete(index)}/>)}
                 <ChatInput key={"AG"} value={currentMessage} handleChange={handleChange} handleSend={handleSend}/>
             </Paper>
         </div>
