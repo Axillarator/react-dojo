@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const CounterApp: React.FC = () => {
 
     const classes = useStyles();
-    const [arrayOfCounts, updateCount] = useState<CounterState[]>([{countValue:0,sign:1}, {countValue:0,sign:1}]);
+    const [arrayOfCounts, updateCount] = useState<CounterState[]>([]);
 
     const createAddHandler = (index: number) => {
         return (amount: number): MouseEventHandler => {
