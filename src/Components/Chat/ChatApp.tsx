@@ -1,16 +1,34 @@
 import * as React from "react";
 import {useState} from "react";
 import ChatInput from "./ChatInput";
+import ChatOutput from "./ChatOutput";
+import {createStyles, makeStyles, Paper, Theme} from "@material-ui/core";
+
+interface Message {
+    content: String
+    time: String
+}
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            padding: theme.spacing(3, 2),
+        },
+    }),
+);
 
 export default function ChatApp() {
 
-    const [arrayOfMessages, updateArray] = useState<String[]>([]);
+    const classes = useStyles();
+    const [arrayOfMessages, updateArray] = useState<Message[]>([]);
     const [currentMessage, updateMessage] = useState("");
 
-
     const handleSend = () => {
+        const currentDate = new Date();
+        const timeString: string = currentDate.getHours() + ":" + currentDate.getMinutes();
+
         let result = [...arrayOfMessages];
-        result.push(currentMessage);
+        result.push({content: currentMessage, time: timeString});
         updateArray(result);
         updateMessage("")
     };
@@ -22,8 +40,11 @@ export default function ChatApp() {
     return (
 
         <div>
-            {arrayOfMessages.map((element, index) => <p key={index}>{element}</p>)}
-            <ChatInput value={currentMessage} handleChange={handleChange} handleSend={handleSend} />
+            <Paper className={classes.root}>
+                {arrayOfMessages.map((element, index) => <ChatOutput key={index} message={element.content}
+                                                                     time={element.time}/>)}
+                <ChatInput key={"AG"} value={currentMessage} handleChange={handleChange} handleSend={handleSend}/>
+            </Paper>
         </div>
 
     )
