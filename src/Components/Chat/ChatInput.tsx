@@ -12,6 +12,13 @@ interface Props {
 
 export default function ChatInput(props: Props) {
 
+    const catchEnter = (event: any) => {
+        if (event.key === 'Enter') {
+            props.handleSend(event);
+            event.preventDefault();
+        }
+    };
+
     return (
         <div>
             <TextField
@@ -21,6 +28,7 @@ export default function ChatInput(props: Props) {
                 rowsMax={5}
                 value={props.value}
                 onChange={props.handleChange}
+                onKeyPress={catchEnter}
             />
             <Button onClick={props.handleSend} variant="contained" color="primary"> Send </Button>
         </div>);
