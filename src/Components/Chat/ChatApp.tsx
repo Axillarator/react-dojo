@@ -7,6 +7,7 @@ import {createStyles, makeStyles, Paper, Theme} from "@material-ui/core";
 interface Message {
     content: String
     time: String
+    likes: number
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,7 +29,7 @@ export default function ChatApp() {
         const timeString: string = currentDate.getHours() + ":" + currentDate.getMinutes();
 
         let result = [...arrayOfMessages];
-        result.push({content: currentMessage, time: timeString});
+        result.push({content: currentMessage, time: timeString, likes: 0});
         updateMessageHistory(result);
         updateMessage("")
     };
@@ -44,13 +45,23 @@ export default function ChatApp() {
         };
     };
 
+    const onLike = (indexToLike: number) => {
+        return () => {
+            let result = [...arrayOfMessages];
+            result[indexToLike].likes = result[indexToLike].likes + 1;
+            updateMessageHistory(result)
+        }
+    };
+
     return (
 
         <div>
             <Paper className={classes.root}>
                 {arrayOfMessages.map((element, index) => <ChatOutput key={index} message={element.content}
                                                                      time={element.time}
-                                                                     onDelete={onDelete(index)}/>)}
+                                                                     onDelete={onDelete(index)}
+                                                                     onLike={onLike(index)}
+                                                                     likes={element.likes}/>)}
                 <ChatInput key={"AG"} value={currentMessage} handleChange={handleChange} handleSend={handleSend}/>
             </Paper>
         </div>
