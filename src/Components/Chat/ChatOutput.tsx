@@ -6,6 +6,7 @@ import makeStyles from "@material-ui/styles/makeStyles";
 import DeleteIcon from '@material-ui/icons/Delete';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import IconButton from "@material-ui/core/IconButton";
+import ReplyIcon from '@material-ui/icons/Reply';
 
 
 interface Props {
@@ -14,6 +15,8 @@ interface Props {
     onDelete: MouseEventHandler
     onLike: MouseEventHandler
     likes: number
+    onReply: MouseEventHandler
+    reply: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -35,13 +38,42 @@ export default function ChatOutput(props: Props) {
 
     const classes = useStyles();
 
-    return (
-        <Paper className={classes.paper}>
+    //message
+    const message = <Paper className={classes.paper}>
+        <Grid container wrap="nowrap" spacing={2}>
+            <Grid item xs={2}>
+                <Avatar>A</Avatar>
+            </Grid>
+            <Grid item xs={10}>
+                <div className={classes.helperDiv}>
+                    <Typography noWrap={false} variant="body1">{props.message}</Typography>
+                </div>
+                <Typography variant="body2" color="textSecondary" align="right">
+                    <IconButton onClick={props.onLike}>
+                        <ThumbUpAltIcon fontSize="small"/>
+                    </IconButton>
+                    {props.likes === 0 ? "" : props.likes}
+                    <IconButton onClick={props.onReply}>
+                        <ReplyIcon fontSize="small"/>
+                    </IconButton>
+                    <IconButton onClick={props.onDelete}>
+                        <DeleteIcon fontSize="small"/>
+                    </IconButton>
+                    {props.time}
+                </Typography>
+            </Grid>
+        </Grid>
+    </Paper>;
+
+    //comment
+    const comment = <Paper className={classes.paper}>
             <Grid container wrap="nowrap" spacing={2}>
+                <Grid item xs={2}>
+                </Grid>
                 <Grid item xs={2}>
                     <Avatar>A</Avatar>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                     <div className={classes.helperDiv}>
                         <Typography noWrap={false} variant="body1">{props.message}</Typography>
                     </div>
@@ -50,6 +82,9 @@ export default function ChatOutput(props: Props) {
                             <ThumbUpAltIcon fontSize="small"/>
                         </IconButton>
                         {props.likes === 0 ? "" : props.likes}
+                        <IconButton onClick={props.onReply}>
+                            <ReplyIcon fontSize="small"/>
+                        </IconButton>
                         <IconButton onClick={props.onDelete}>
                             <DeleteIcon fontSize="small"/>
                         </IconButton>
@@ -57,6 +92,7 @@ export default function ChatOutput(props: Props) {
                     </Typography>
                 </Grid>
             </Grid>
-        </Paper>
-    )
+        </Paper>;
+
+    return props.reply ? comment : message
 }

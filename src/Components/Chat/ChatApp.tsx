@@ -8,6 +8,7 @@ interface Message {
     content: String
     time: String
     likes: number
+    reply: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,7 +30,7 @@ export default function ChatApp() {
         const timeString: string = currentDate.getHours() + ":" + currentDate.getMinutes();
 
         let result = [...arrayOfMessages];
-        result.push({content: currentMessage, time: timeString, likes: 0});
+        result.push({content: currentMessage, time: timeString, likes: 0, reply: false});
         updateMessageHistory(result);
         updateMessage("")
     };
@@ -53,6 +54,17 @@ export default function ChatApp() {
         }
     };
 
+    const onReply = (indexToReply: number) => {
+        return () => {
+            const currentDate = new Date();
+            const timeString: string = currentDate.getHours() + ":" + currentDate.getMinutes();
+
+            let result = [...arrayOfMessages];
+            result.splice(indexToReply + 1, 0, {content: "reply to message", time: timeString, likes: 0, reply: true});
+            updateMessageHistory(result)
+        }
+    };
+
     return (
 
         <div>
@@ -61,7 +73,9 @@ export default function ChatApp() {
                                                                      time={element.time}
                                                                      onDelete={onDelete(index)}
                                                                      onLike={onLike(index)}
-                                                                     likes={element.likes}/>)}
+                                                                     likes={element.likes}
+                                                                     onReply={onReply(index)}
+                                                                     reply={element.reply}/>)}
                 <ChatInput key={"AG"} value={currentMessage} handleChange={handleChange} handleSend={handleSend}/>
             </Paper>
         </div>
