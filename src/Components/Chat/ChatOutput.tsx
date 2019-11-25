@@ -21,16 +21,48 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        helperDiv: {
+        messageContainer: {
+            display: "flex",
+            flexGrow: 1,
+            flexDirection: "column",
+            width: "100%",
+            overflow: "hidden"
+        },
+        messageHelperDiv: {
             overflow: "hidden",
             textOverflow: "ellipsis",
-            width: "100%"
+            width: "100%",
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingBottom: 10
+        },
+        messageMenuContainer: {
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center"
+        },
+        avatar: {
+            padding: 10,
+            margin: 5,
+            flexGrow: 0
+        },
+        wrapper: {
+            display: "flex",
+            maxWidth: 400
         },
         paper: {
-            maxWidth: 400,
+            maxWidth: 350,
             margin: 5,
-            padding: 10
+            paddingLeft: 10,
+            paddingTop: 10,
+            paddingRight: 10,
+            display: "flex",
+            flexGrow: 1
+        },
+        emptySpace: {
+            width: 50
         }
+
     })
 );
 
@@ -39,60 +71,69 @@ export default function ChatOutput(props: Props) {
     const classes = useStyles();
 
     //message
-    const message = <Paper className={classes.paper}>
-        <Grid container wrap="nowrap" spacing={2}>
-            <Grid item xs={2}>
-                <Avatar>A</Avatar>
-            </Grid>
-            <Grid item xs={10}>
-                <div className={classes.helperDiv}>
-                    <Typography noWrap={false} variant="body1">{props.message}</Typography>
+    const message = <div className={classes.wrapper}>
+        <Paper className={classes.paper}>
+            <Avatar className={classes.avatar}>
+                A
+            </Avatar>
+            <div className={classes.messageContainer}>
+                <div className={classes.messageHelperDiv}>
+                    <Typography variant="body1">{props.message}</Typography>
                 </div>
-                <Typography variant="body2" color="textSecondary" align="right">
+                <div className={classes.messageMenuContainer}>
                     <IconButton onClick={props.onLike}>
                         <ThumbUpAltIcon fontSize="small"/>
                     </IconButton>
-                    {props.likes === 0 ? "" : props.likes}
+                    <Typography variant="body2" color="textSecondary">
+                        {props.likes === 0 ? "" : props.likes}
+                    </Typography>
                     <IconButton onClick={props.onReply}>
                         <ReplyIcon fontSize="small"/>
                     </IconButton>
                     <IconButton onClick={props.onDelete}>
                         <DeleteIcon fontSize="small"/>
                     </IconButton>
-                    {props.time}
-                </Typography>
-            </Grid>
-        </Grid>
-    </Paper>;
-
-    //comment
-    const comment = <Paper className={classes.paper}>
-            <Grid container wrap="nowrap" spacing={2}>
-                <Grid item xs={2}>
-                </Grid>
-                <Grid item xs={2}>
-                    <Avatar>A</Avatar>
-                </Grid>
-                <Grid item xs={8}>
-                    <div className={classes.helperDiv}>
-                        <Typography noWrap={false} variant="body1">{props.message}</Typography>
-                    </div>
-                    <Typography variant="body2" color="textSecondary" align="right">
-                        <IconButton onClick={props.onLike}>
-                            <ThumbUpAltIcon fontSize="small"/>
-                        </IconButton>
-                        {props.likes === 0 ? "" : props.likes}
-                        <IconButton onClick={props.onReply}>
-                            <ReplyIcon fontSize="small"/>
-                        </IconButton>
-                        <IconButton onClick={props.onDelete}>
-                            <DeleteIcon fontSize="small"/>
-                        </IconButton>
+                    <Typography variant="body2" color="textSecondary">
                         {props.time}
                     </Typography>
-                </Grid>
-            </Grid>
-        </Paper>;
+                </div>
+            </div>
+        </Paper>
+    </div>
+
+    //comment
+    const comment = <div className={classes.wrapper}>
+        <div className={classes.emptySpace}>
+        </div>
+        <Paper className={classes.paper}>
+            <Avatar className={classes.avatar}>
+                A
+            </Avatar>
+            <div className={classes.messageContainer}>
+                <div className={classes.messageHelperDiv}>
+                    <Typography variant="body1">{props.message}</Typography>
+                </div>
+                <div className={classes.messageMenuContainer}>
+                    <IconButton onClick={props.onLike}>
+                        <ThumbUpAltIcon fontSize="small"/>
+                    </IconButton>
+                    <Typography variant="body2" color="textSecondary">
+                        {props.likes === 0 ? "" : props.likes}
+                    </Typography>
+                    <IconButton onClick={props.onReply}>
+                        <ReplyIcon fontSize="small"/>
+                    </IconButton>
+                    <IconButton onClick={props.onDelete}>
+                        <DeleteIcon fontSize="small"/>
+                    </IconButton>
+                    <Typography variant="body2" color="textSecondary">
+                        {props.time}
+                    </Typography>
+                </div>
+            </div>
+        </Paper>
+    </div>;
 
     return props.reply ? comment : message
+
 }
