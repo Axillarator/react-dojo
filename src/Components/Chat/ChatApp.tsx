@@ -1,14 +1,13 @@
 import * as React from "react";
 import {useState} from "react";
-import ChatInput from "./ChatInput";
-import ChatOutput from "./ChatOutput";
 import {createStyles, makeStyles, Paper, Theme} from "@material-ui/core";
+import ChatOutputContainer from "./ChatOutputContainer";
 
 interface Message {
-    content: String
+    currentContent: String
     time: String
     likes: number
-    reply: boolean
+    editMode: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,24 +18,41 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+function getFormattedTime(): string {
+    const currentDate = new Date();
+    const hours = currentDate.getHours();
+    let minutes = currentDate.getMinutes();
+
+    if (minutes < 10) {
+        const formattedMinutes = "0" + minutes;
+        return hours + ":" + formattedMinutes;
+    }
+    return hours + ":" + minutes;
+}
+
 export default function ChatApp() {
 
     const classes = useStyles();
-    const [arrayOfMessages, updateMessageHistory] = useState<Message[]>([]);
-    const [currentMessage, updateMessage] = useState("");
+    const [arrayOfMessages, updateMessageHistory] = useState<Message[]>([{currentContent: "", time: getFormattedTime(), likes: 0, editMode: true}]);
 
-    const handleSend = () => {
-        const currentDate = new Date();
-        const timeString: string = currentDate.getHours() + ":" + currentDate.getMinutes();
-
-        let result = [...arrayOfMessages];
-        result.push({content: currentMessage, time: timeString, likes: 0, reply: false});
-        updateMessageHistory(result);
-        updateMessage("")
+    const handleSend = (indexToSend: number) => {
+        return () => {
+            const timeString: string = getFormattedTime();
+            let result = [...arrayOfMessages];
+            result[indexToSend].editMode = false;
+            result[indexToSend].time = timeString;
+            updateMessageHistory(result);
+        };
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateMessage(event.target.value);
+        return () => {
+            let result = [...arrayOfMessages];
+            result[parseInt(event.target.name)].currentContent = event.target.value;
+            console.log(event.target.name);
+            console.log(event.target.value);
+            updateMessageHistory(result);
+        };
     };
 
     const onDelete = (indexToRemove: number) => {
@@ -50,18 +66,16 @@ export default function ChatApp() {
         return () => {
             let result = [...arrayOfMessages];
             result[indexToLike].likes = result[indexToLike].likes + 1;
-            updateMessageHistory(result)
+            updateMessageHistory(result);
         }
     };
 
     const onReply = (indexToReply: number) => {
         return () => {
-            const currentDate = new Date();
-            const timeString: string = currentDate.getHours() + ":" + currentDate.getMinutes();
-
+            const timeString: string = getFormattedTime();
             let result = [...arrayOfMessages];
-            result.splice(indexToReply + 1, 0, {content: "reply to message", time: timeString, likes: 0, reply: true});
-            updateMessageHistory(result)
+            result.splice(indexToReply + 1, 0, {currentContent: "", time: timeString, likes: 0, editMode: true});
+            updateMessageHistory(result);
         }
     };
 
@@ -69,14 +83,19 @@ export default function ChatApp() {
 
         <div>
             <Paper className={classes.root}>
-                {arrayOfMessages.map((element, index) => <ChatOutput key={index} message={element.content}
-                                                                     time={element.time}
-                                                                     onDelete={onDelete(index)}
-                                                                     onLike={onLike(index)}
-                                                                     likes={element.likes}
-                                                                     onReply={onReply(index)}
-                                                                     reply={element.reply}/>)}
-                <ChatInput key={"AG"} value={currentMessage} handleChange={handleChange} handleSend={handleSend}/>
+                {arrayOfMessages.map((element, index) => <ChatOutputContainer
+                    key={index}
+                    message={element.currentContent}
+                    time={element.time}
+                    onDelete={onDelete(index)}
+                    onLike={onLike(index)}
+                    likes={element.likes}
+                    inputValue={element.currentContent}
+                    inputId={index}
+                    handleChange={handleChange}
+                    handleSend={handleSend(index)}
+                    onReply={onReply(index)}
+                    editMode={element.editMode}/>)}
             </Paper>
         </div>
 

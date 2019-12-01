@@ -1,13 +1,16 @@
 import * as React from "react";
 import {ChangeEventHandler, MouseEventHandler} from "react";
-import Button from '@material-ui/core/Button';
 import {TextField} from "@material-ui/core";
+import SendIcon from '@material-ui/icons/Send';
+import IconButton from "@material-ui/core/IconButton";
 
 
 interface Props {
-    value: String
+    inputValue: String
+    inputId: number
     handleSend: MouseEventHandler
     handleChange: ChangeEventHandler
+    editMode: boolean
 }
 
 export default function ChatInput(props: Props) {
@@ -19,16 +22,23 @@ export default function ChatInput(props: Props) {
         }
     };
 
-    return (
+    const empty = <div/>;
+
+    const chatInput =  (
         <div>
             <TextField
                 placeholder="Nachricht"
                 variant="outlined"
                 multiline
-                value={props.value}
+                name={props.inputId.toString()}
+                value={props.inputValue}
                 onChange={props.handleChange}
                 onKeyPress={catchEnter}
             />
-            <Button onClick={props.handleSend} variant="contained" color="primary"> Send </Button>
+            <IconButton onClick={props.handleSend} color="primary">
+                <SendIcon fontSize="large"/>
+            </IconButton>
         </div>);
+
+    return props.editMode ? chatInput : empty;
 }
