@@ -46,13 +46,9 @@ export default function ChatApp() {
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        return () => {
-            let result = [...arrayOfMessages];
-            result[parseInt(event.target.name)].currentContent = event.target.value;
-            console.log(event.target.name);
-            console.log(event.target.value);
-            updateMessageHistory(result);
-        };
+        let result = [...arrayOfMessages];
+        result[parseInt(event.target.name)].currentContent = event.target.value;
+        updateMessageHistory(result);
     };
 
     const onDelete = (indexToRemove: number) => {
@@ -80,7 +76,6 @@ export default function ChatApp() {
     };
 
     return (
-
         <div>
             <Paper className={classes.root}>
                 {arrayOfMessages.map((element, index) => <ChatOutputContainer
