@@ -48,18 +48,18 @@ export default function ChatOutputMenu(props: Props) {
             <IconButton onClick={props.onReply}>
                 <ReplyIcon fontSize="small"/>
             </IconButton>
+            <Typography variant="body2" color="textSecondary">
+                {props.time === props.editTime ? "" : "edited: " + props.editTime}
+            </Typography>
             <IconButton onClick={props.onEdit}>
                 <EditIcon fontSize="small"/>
             </IconButton>
             <Typography variant="body2" color="textSecondary">
-                {props.time === props.editTime ? "" : "edited: " + props.editTime}
+                {"created: " + props.time}
             </Typography>
             <IconButton onClick={props.onDelete}>
                 <DeleteIcon fontSize="small"/>
             </IconButton>
-            <Typography variant="body2" color="textSecondary">
-                {props.time}
-            </Typography>
         </div>);
 
     return props.editMode ? empty : chatOutputMenu
