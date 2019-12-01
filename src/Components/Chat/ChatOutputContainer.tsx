@@ -15,7 +15,9 @@ interface Props {
     inputValue: String
     inputId: number
     editMode: boolean
+    editTime: String
     onDelete: MouseEventHandler
+    onEdit: MouseEventHandler
     onLike: MouseEventHandler
     onReply: MouseEventHandler
     handleSend: MouseEventHandler
@@ -73,6 +75,8 @@ export default function ChatOutputContainer(props: Props) {
                     <ChatOutputMenu onLike={props.onLike}
                                     likes={props.likes}
                                     onDelete={props.onDelete}
+                                    onEdit={props.onEdit}
+                                    editTime={props.editTime}
                                     time={props.time}
                                     onReply={props.onReply}
                                     editMode={props.editMode}/>

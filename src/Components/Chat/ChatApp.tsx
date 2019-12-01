@@ -7,7 +7,9 @@ interface Message {
     currentContent: String
     time: String
     likes: number
+    initialMessage: boolean
     editMode: boolean
+    editTime: String
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,14 +35,19 @@ function getFormattedTime(): string {
 export default function ChatApp() {
 
     const classes = useStyles();
-    const [arrayOfMessages, updateMessageHistory] = useState<Message[]>([{currentContent: "", time: getFormattedTime(), likes: 0, editMode: true}]);
+    const [arrayOfMessages, updateMessageHistory] = useState<Message[]>([{currentContent: "", initialMessage: true, time: getFormattedTime(), likes: 0, editMode: true, editTime: getFormattedTime()}]);
 
     const handleSend = (indexToSend: number) => {
         return () => {
             const timeString: string = getFormattedTime();
             let result = [...arrayOfMessages];
             result[indexToSend].editMode = false;
-            result[indexToSend].time = timeString;
+            if ( result[indexToSend].initialMessage ){
+                result[indexToSend].time = timeString;
+                result[indexToSend].editTime = timeString;
+            } else {
+                result[indexToSend].editTime = timeString;
+            }
             updateMessageHistory(result);
         };
     };
@@ -70,7 +77,17 @@ export default function ChatApp() {
         return () => {
             const timeString: string = getFormattedTime();
             let result = [...arrayOfMessages];
-            result.splice(indexToReply + 1, 0, {currentContent: "", time: timeString, likes: 0, editMode: true});
+            result.splice(indexToReply + 1, 0, {currentContent: "", initialMessage: true, time: timeString, likes: 0, editMode: true, editTime: timeString});
+            updateMessageHistory(result);
+        }
+    };
+
+    const onEdit = (indexToEdit: number) => {
+        return () => {
+            const timeString: string = getFormattedTime();
+            let result = [...arrayOfMessages];
+            result[indexToEdit].editMode = true;
+            result[indexToEdit].initialMessage = false
             updateMessageHistory(result);
         }
     };
@@ -83,6 +100,8 @@ export default function ChatApp() {
                     message={element.currentContent}
                     time={element.time}
                     onDelete={onDelete(index)}
+                    onEdit={onEdit(index)}
+                    editTime={element.editTime}
                     onLike={onLike(index)}
                     likes={element.likes}
                     inputValue={element.currentContent}

@@ -7,11 +7,14 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import IconButton from "@material-ui/core/IconButton";
 import ReplyIcon from "@material-ui/icons/Reply";
+import EditIcon from '@material-ui/icons/Edit';
 
 
 interface Props {
     time: String
+    editTime: String
     onDelete: MouseEventHandler
+    onEdit: MouseEventHandler
     onReply: MouseEventHandler
     onLike: MouseEventHandler
     likes: number
@@ -45,6 +48,12 @@ export default function ChatOutputMenu(props: Props) {
             <IconButton onClick={props.onReply}>
                 <ReplyIcon fontSize="small"/>
             </IconButton>
+            <IconButton onClick={props.onEdit}>
+                <EditIcon fontSize="small"/>
+            </IconButton>
+            <Typography variant="body2" color="textSecondary">
+                {props.time === props.editTime ? "" : "edited: " + props.editTime}
+            </Typography>
             <IconButton onClick={props.onDelete}>
                 <DeleteIcon fontSize="small"/>
             </IconButton>
