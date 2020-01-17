@@ -87,7 +87,8 @@ export default function ChatApp() {
             const timeString: string = getFormattedTime();
             let result = [...arrayOfMessages];
             result[indexToEdit].editMode = true;
-            result[indexToEdit].initialMessage = false
+            result[indexToEdit].initialMessage = false;
+            result[indexToEdit].editTime = timeString;
             updateMessageHistory(result);
         }
     };

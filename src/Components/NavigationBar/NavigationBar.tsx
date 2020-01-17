@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import CounterApp from "../CounterApp/CounterApp";
 import ChatApp from "../Chat/ChatApp";
 import PollApp from "../Poll/PollApp";
+import Terminfinder from "../Termin/Terminfinder";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -52,6 +53,7 @@ export default function NavigationBar() {
                 <Tabs value={tabIndex} onChange={handleIndexChange}>
                     <Tab label="CounterApp"/>
                     <Tab label="ChatApp"/>
+                    <Tab label="Terminfinder"/>
                     <Tab label="PollApp"/>
                 </Tabs>
             </AppBar>
@@ -62,6 +64,9 @@ export default function NavigationBar() {
                 <ChatApp/>
             </TabPanel>
             <TabPanel value={tabIndex} index={2}>
+                <Terminfinder/>
+            </TabPanel>
+            <TabPanel value={tabIndex} index={3}>
                 <PollApp/>
             </TabPanel>
         </div>
