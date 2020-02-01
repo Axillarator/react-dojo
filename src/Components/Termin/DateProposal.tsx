@@ -9,8 +9,17 @@ import {MouseEventHandler, useState} from "react";
 
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Vote from "./Vote";
-import {TextField} from "@material-ui/core";
+import {createStyles, makeStyles, TextField, Theme} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        date: {
+            width: '190px',
+            height: '24px'
+        }
+    }),
+);
 
 interface Props {
     selectedStartDate: MaterialUiPickersDate
@@ -22,6 +31,8 @@ interface Props {
 
 export default function DateProposal(props: Props) {
 
+    const classes = useStyles();
+
     const [inputValue, setInput] = useState<String>("");
     const [messageVisible, toggleMessage] = useState<boolean>(false);
 
@@ -30,23 +41,26 @@ export default function DateProposal(props: Props) {
             <form>
                 {(props.selectedStartDate!! < props.selectedEndDate!!) ?
                     <Chip
+                        className={classes.date}
                         label={props.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + props.selectedEndDate!!.format("dd. DD.MM.YY")}
                     />
                     :
                     <Chip
+                        className={classes.date}
                         label={props.selectedStartDate!!.format("dd. DD.MM.YY")}
                     />
                 }
 
-                <Chip
-                    label={props.check}
-                />
+                <Typography variant="button">
+                    {props.check}
+                </Typography>
                 <Vote
                     check={props.check}
                     onClick={props.handleCheck}
                 />
                 <Tooltip title="Notiz hinzufügen">
                     <IconButton
+                        size="small"
                         aria-label="Notiz hinzufügen"
                         onClick={() => toggleMessage(!messageVisible)}>
                         <ChatBubbleIcon/>
@@ -65,7 +79,10 @@ export default function DateProposal(props: Props) {
                     />
                     :
                     <Tooltip title="Vorschlag entfernen">
-                        <IconButton aria-label="delete" onClick={props.onDelete}>
+                        <IconButton
+                            aria-label="delete"
+                            size="small"
+                            onClick={props.onDelete}>
                             <DeleteIcon/>
                         </IconButton>
                     </Tooltip>}

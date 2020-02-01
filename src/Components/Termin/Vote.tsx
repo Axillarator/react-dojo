@@ -28,14 +28,14 @@ export default function Vote(props: Props) {
 
     if (props.check === 0) {
         return (
-            <IconButton aria-label="Undecided" onClick={props.onClick}>
+            <IconButton aria-label="Undecided" onClick={props.onClick} size="small">
                 <CheckBoxOutlineBlankIcon/>
             </IconButton>
         )
     }
     if (props.check === 1) {
         return (
-            <IconButton aria-label="Yes" onClick={props.onClick}>
+            <IconButton aria-label="Yes" onClick={props.onClick} size="small">
                 <CheckBoxIcon
                     className={classes.accept}
                 />
@@ -44,7 +44,7 @@ export default function Vote(props: Props) {
     }
     if (props.check === 2) {
         return (
-            <IconButton aria-label="No" onClick={props.onClick}>
+            <IconButton aria-label="No" onClick={props.onClick} size="small">
                 <IndeterminateCheckBoxIcon
                     className={classes.reject}
                 />
