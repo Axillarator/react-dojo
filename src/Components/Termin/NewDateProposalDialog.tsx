@@ -8,7 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import * as React from "react";
-import {MouseEventHandler, useState} from "react";
+import {MouseEventHandler} from "react";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import moment from "moment";
 import {createStyles, makeStyles, Theme} from "@material-ui/core";
@@ -20,8 +20,13 @@ interface Props {
     handleAdd: MouseEventHandler
     selectedStartDate: MaterialUiPickersDate
     handleStartDateChange: (date: MaterialUiPickersDate) => void
+    startDatePickerIsOpen: boolean
+    handleStartDatePicker: () => void
     selectedEndDate: MaterialUiPickersDate
     handleEndDateChange: (date: MaterialUiPickersDate) => void
+    endDatePickerIsOpen: boolean
+    handleEndDatePicker: () => void
+    dayEvent: boolean
     handleDayEvent: () => void
 }
 
@@ -40,20 +45,9 @@ export default function NewDateProposalDialog(props: Props) {
 
     const classes = useStyles();
 
-    const [dayEvent, toggleDayEvent] = useState<boolean>(false);
-    const [startDateIsOpen, setIsOpenStart] = useState(false);
-    const [endDateIsOpen, setIsOpenEnd] = useState(false);
-
-
-    const toggleSliderDayEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-        toggleDayEvent(event.target.checked);
-        props.handleDayEvent();
+    const TextFieldComponent = (textFieldProps: any) => {
+        return <TextField {...textFieldProps} disabled={props.dayEvent}/>
     };
-
-    const TextFieldComponent = (props: any) => {
-        return <TextField {...props} disabled={dayEvent}/>
-    };
-
 
     return (
         <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
@@ -62,22 +56,24 @@ export default function NewDateProposalDialog(props: Props) {
                 <MuiPickersUtilsProvider utils={MomentUtils}>
                     <DatePicker
                         className={classes.date}
-                        open={startDateIsOpen}
-                        onOpen={() => setIsOpenStart(true)}
-                        onClose={() => setIsOpenStart(false)}
+                        open={props.startDatePickerIsOpen}
+                        onOpen={props.handleStartDatePicker}
+                        onClose={props.handleStartDatePicker}
                         value={props.selectedStartDate}
                         onChange={props.handleStartDateChange}
                         format={"dd. DD.MM.YYYY"}
                         label="Anreisetag"
                     />
                     <DatePicker
-                        open={endDateIsOpen}
-                        onOpen={() => setIsOpenEnd(true)}
-                        onClose={() => setIsOpenEnd(false)}
+                        open={props.endDatePickerIsOpen}
+                        onOpen={props.handleEndDatePicker}
+                        onClose={props.handleEndDatePicker}
                         value={props.selectedEndDate}
                         onChange={props.handleEndDateChange}
                         format={"dd. DD.MM.YYYY"}
                         label="Abreisetag"
+                        minDate={props.selectedStartDate}
+                        minDateMessage={"Abreise- vor Anreisetag!"}
                         TextFieldComponent={TextFieldComponent}
                     />
                 </MuiPickersUtilsProvider>
@@ -85,8 +81,8 @@ export default function NewDateProposalDialog(props: Props) {
                 <FormControlLabel
                     control={
                         <Checkbox
-                            checked={dayEvent}
-                            onChange={toggleSliderDayEvent}
+                            checked={props.dayEvent}
+                            onChange={props.handleDayEvent}
                             value="Eintägiges Event"
                             color={"primary"}
                             inputProps={{'aria-label': 'secondary checkbox'}}

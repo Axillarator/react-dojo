@@ -46,9 +46,32 @@ export default function Terminfinder() {
     const [openPopUp, setOpenPopUp] = useState<boolean>(false);
     const [startDatePopUp, updateStartDatePopUp] = useState<MaterialUiPickersDate>(moment());
     const [endDatePopUp, updateEndDatePopUp] = useState<MaterialUiPickersDate>(moment());
+    const [dayEventPopUp, toggleDayEventPopUp] = useState<boolean>(false);
 
-    const onSelectDayEvent = () => {
-        updateEndDatePopUp(startDatePopUp);
+    const [startDatePickerIsOpen, updateStartDatePicker] = useState(false);
+    const [endDatePickerIsOpen, updateEndDatePicker] = useState(false);
+
+
+    const handleStartDatePicker = () => {
+        console.log("handleStartDatePicker");
+
+        updateStartDatePicker(!startDatePickerIsOpen);
+        if (dayEventPopUp) {
+            updateEndDatePopUp(startDatePopUp);
+        }
+    };
+
+    const handleEndDatePicker = () => {
+        updateEndDatePicker(!endDatePickerIsOpen);
+    };
+
+    const handleDayEventToggle = () => {
+        if (dayEventPopUp) {
+            toggleDayEventPopUp(false);
+        } else {
+            updateEndDatePopUp(startDatePopUp);
+            toggleDayEventPopUp(true);
+        }
     };
 
     const onDelete = (indexToRemove: number) => {
@@ -112,9 +135,14 @@ export default function Terminfinder() {
                 handleAdd={handleAdd}
                 selectedStartDate={startDatePopUp}
                 handleStartDateChange={updateStartDatePopUp}
+                startDatePickerIsOpen={startDatePickerIsOpen}
+                handleStartDatePicker={handleStartDatePicker}
                 selectedEndDate={endDatePopUp}
                 handleEndDateChange={updateEndDatePopUp}
-                handleDayEvent={onSelectDayEvent}
+                endDatePickerIsOpen={endDatePickerIsOpen}
+                handleEndDatePicker={handleEndDatePicker}
+                handleDayEvent={handleDayEventToggle}
+                dayEvent={dayEventPopUp}
             />
         </div>
     )
