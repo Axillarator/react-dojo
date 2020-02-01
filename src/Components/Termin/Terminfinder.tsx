@@ -26,56 +26,95 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+interface DateSuggestion {
+    check: number
+    selectedStartDate: MaterialUiPickersDate
+    selectedEndDate: MaterialUiPickersDate
+}
+
 export default function Terminfinder() {
     moment.locale('de');
 
-
     const classes = useStyles();
-    const [check, toggleCheck] = useState<boolean>(false);
 
+    const [arrayOfDateSuggestions, updateDateSuggestions] = useState<DateSuggestion[]>([{
+        check: 0,
+        selectedStartDate: moment(),
+        selectedEndDate: moment()
+    }]);
 
-    const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-        toggleCheck(event.target.checked);
+    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
+    const [startDatePopUp, updateStartDatePopUp] = useState<MaterialUiPickersDate>(moment());
+    const [endDatePopUp, updateEndDatePopUp] = useState<MaterialUiPickersDate>(moment());
+
+    const onSelectDayEvent = () => {
+        updateEndDatePopUp(startDatePopUp);
     };
 
-    const [selectedStartDate, handleStartDateChange] = useState<MaterialUiPickersDate>(moment());
-    const [selectedEndDate, handleEndDateChange] = useState<MaterialUiPickersDate>(moment());
-
-
-    const [open, setOpen] = React.useState<boolean>(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
+    const onDelete = (indexToRemove: number) => {
+        return () => {
+            let result = [...arrayOfDateSuggestions];
+            updateDateSuggestions(result.filter((value, index) => index !== indexToRemove));
+        };
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCheck = (indexToCheck: number) => {
+        return () => {
+            let result = [...arrayOfDateSuggestions];
+            result[indexToCheck].check = (result[indexToCheck].check + 1) % 3;
+            updateDateSuggestions(result);
+        }
     };
+
+    const handlePopUpOpen = () => {
+        setOpenPopUp(true);
+    };
+
+    const handlePopUpClose = () => {
+        setOpenPopUp(false);
+    };
+
+    const handleAdd = () => {
+        setOpenPopUp(false);
+        let result = [...arrayOfDateSuggestions];
+        result.push({
+            check: 0,
+            selectedStartDate: startDatePopUp,
+            selectedEndDate: endDatePopUp
+        });
+        updateDateSuggestions(result);
+    };
+    const sortedArray = arrayOfDateSuggestions.sort(
+        (a, b) => a.selectedStartDate!!.diff(b.selectedStartDate!!));
 
     return (
         <div>
             <Paper className={classes.root}>
-                <DateProposal
-                    check={check}
-                    handleCheck={handleCheck}
-                    selectedStartDate={selectedStartDate}
-                    selectedEndDate={selectedEndDate}
-                />
+                {sortedArray.map((element, index) => <DateProposal
+                    key={index}
+                    check={element.check}
+                    handleCheck={handleCheck(index)}
+                    selectedStartDate={element.selectedStartDate}
+                    selectedEndDate={element.selectedEndDate}
+                    onDelete={onDelete(index)}
+                />)}
                 <Fab
                     color="primary"
                     aria-label="add"
                     className={classes.fab}
-                    onClick={handleClickOpen}>
+                    onClick={handlePopUpOpen}>
                     <AddIcon/>
                 </Fab>
             </Paper>
             <NewDateProposalDialog
-                open={open}
-                handleClose={handleClose}
-                selectedStartDate={selectedStartDate}
-                handleStartDateChange={handleStartDateChange}
-                selectedEndDate={selectedEndDate}
-                handleEndDateChange={handleEndDateChange}
+                open={openPopUp}
+                handleClose={handlePopUpClose}
+                handleAdd={handleAdd}
+                selectedStartDate={startDatePopUp}
+                handleStartDateChange={updateStartDatePopUp}
+                selectedEndDate={endDatePopUp}
+                handleEndDateChange={updateEndDatePopUp}
+                handleDayEvent={onSelectDayEvent}
             />
         </div>
     )

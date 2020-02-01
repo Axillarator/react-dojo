@@ -17,10 +17,12 @@ import TextField from "@material-ui/core/TextField";
 interface Props {
     open: boolean
     handleClose: MouseEventHandler
+    handleAdd: MouseEventHandler
     selectedStartDate: MaterialUiPickersDate
     handleStartDateChange: (date: MaterialUiPickersDate) => void
     selectedEndDate: MaterialUiPickersDate
     handleEndDateChange: (date: MaterialUiPickersDate) => void
+    handleDayEvent: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,10 +47,11 @@ export default function NewDateProposalDialog(props: Props) {
 
     const toggleSliderDayEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
         toggleDayEvent(event.target.checked);
+        props.handleDayEvent();
     };
 
     const TextFieldComponent = (props: any) => {
-        return <TextField {...props} disabled={true}/>
+        return <TextField {...props} disabled={dayEvent}/>
     };
 
 
@@ -67,26 +70,16 @@ export default function NewDateProposalDialog(props: Props) {
                         format={"dd. DD.MM.YYYY"}
                         label="Anreisetag"
                     />
-                    {!dayEvent ? <DatePicker
-                        open={endDateIsOpen
-                        }
+                    <DatePicker
+                        open={endDateIsOpen}
                         onOpen={() => setIsOpenEnd(true)}
                         onClose={() => setIsOpenEnd(false)}
                         value={props.selectedEndDate}
                         onChange={props.handleEndDateChange}
                         format={"dd. DD.MM.YYYY"}
                         label="Abreisetag"
-                    /> : <DatePicker
-                        open={endDateIsOpen
-                        }
-                        onOpen={() => setIsOpenEnd(true)}
-                        onClose={() => setIsOpenEnd(false)}
-                        value={props.selectedStartDate}
-                        onChange={props.handleEndDateChange}
-                        format={"dd. DD.MM.YYYY"}
-                        label="Abreisetag"
                         TextFieldComponent={TextFieldComponent}
-                    />}
+                    />
                 </MuiPickersUtilsProvider>
                 <br/>
                 <FormControlLabel
@@ -106,7 +99,7 @@ export default function NewDateProposalDialog(props: Props) {
                 <Button onClick={props.handleClose} color="primary">
                     abbrechen
                 </Button>
-                <Button onClick={props.handleClose} color="primary">
+                <Button onClick={props.handleAdd} color="primary">
                     hinzufügen
                 </Button>
             </DialogActions>

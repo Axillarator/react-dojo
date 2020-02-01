@@ -1,45 +1,55 @@
 import Chip from "@material-ui/core/Chip";
-import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import ChatBubbleIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import DeleteIcon from '@material-ui/icons/Delete';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import * as React from "react";
-import {ChangeEventHandler} from "react";
+import {MouseEventHandler} from "react";
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
+
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 
 
 interface Props {
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
-    check: boolean
-    handleCheck: ChangeEventHandler
+    check: number
+    handleCheck: MouseEventHandler
+    onDelete: MouseEventHandler
 }
 
 export default function DateProposal(props: Props) {
 
     return (
         <div>
+            {(props.selectedStartDate!! < props.selectedEndDate!!) ?
+                <Chip
+                    label={props.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + props.selectedEndDate!!.format("dd. DD.MM.YY")}
+                />
+                :
+                <Chip
+                    label={props.selectedStartDate!!.format("dd. DD.MM.YY")}
+                />
+            }
+
             <Chip
-                label={props.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + props.selectedEndDate!!.format("dd. DD.MM.YY")}
+                label={props.check}
             />
-            <Chip
-                label={0}
-            />
-            <Checkbox
-                checked={props.check}
-                onChange={props.handleCheck}
-                value="primary"
-                inputProps={{'aria-label': 'primary checkbox'}}
-            />
+            <IconButton aria-label="Check" onClick={props.handleCheck}>
+                <CheckBoxIcon/>
+            </IconButton>
             <Tooltip title="Notiz hinzufügen">
-                <IconButton aria-label="delete">
+                <IconButton aria-label="Notiz hinzufügen">
                     <ChatBubbleIcon/>
                 </IconButton>
             </Tooltip>
-            <IconButton aria-label="delete">
-                <DeleteIcon/>
-            </IconButton>
+            <Tooltip title="Vorschlag entfernen">
+                <IconButton aria-label="delete" onClick={props.onDelete}>
+                    <DeleteIcon/>
+                </IconButton>
+            </Tooltip>
+
         </div>
     )
 }
