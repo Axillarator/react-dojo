@@ -5,10 +5,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import * as React from "react";
 import {MouseEventHandler} from "react";
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
+import Vote from "./Vote";
 
 
 interface Props {
@@ -36,9 +36,10 @@ export default function DateProposal(props: Props) {
             <Chip
                 label={props.check}
             />
-            <IconButton aria-label="Check" onClick={props.handleCheck}>
-                <CheckBoxIcon/>
-            </IconButton>
+            <Vote
+                check={props.check}
+                onClick={props.handleCheck}
+            />
             <Tooltip title="Notiz hinzufügen">
                 <IconButton aria-label="Notiz hinzufügen">
                     <ChatBubbleIcon/>
