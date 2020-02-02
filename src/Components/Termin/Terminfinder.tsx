@@ -8,6 +8,7 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from '@material-ui/icons/Add';
 import DateProposal from "./DateProposal";
 import NewDateProposalDialog from "./NewDateProposalDialog";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface DateSuggestion {
     check: number
+    deleteCandidate: boolean
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
 }
@@ -37,11 +39,7 @@ export default function Terminfinder() {
 
     const classes = useStyles();
 
-    const [arrayOfDateSuggestions, updateDateSuggestions] = useState<DateSuggestion[]>([{
-        check: 0,
-        selectedStartDate: moment(),
-        selectedEndDate: moment()
-    }]);
+    const [arrayOfDateSuggestions, updateDateSuggestions] = useState<DateSuggestion[]>([]);
 
     const [openPopUp, setOpenPopUp] = useState<boolean>(false);
     const [startDatePopUp, updateStartDatePopUp] = useState<MaterialUiPickersDate>(moment());
@@ -50,7 +48,6 @@ export default function Terminfinder() {
 
     const [startDatePickerIsOpen, updateStartDatePicker] = useState(false);
     const [endDatePickerIsOpen, updateEndDatePicker] = useState(false);
-
 
     const handleStartDatePicker = () => {
         updateStartDatePicker(!startDatePickerIsOpen);
@@ -73,6 +70,22 @@ export default function Terminfinder() {
     };
 
     const onDelete = (indexToRemove: number) => {
+        return () => {
+            let result = [...arrayOfDateSuggestions];
+            result[indexToRemove].deleteCandidate = true;
+            updateDateSuggestions(result);
+        }
+    };
+
+    const abortConfirmDelete = (indexToRemove: number) => {
+        return () => {
+            let result = [...arrayOfDateSuggestions];
+            result[indexToRemove].deleteCandidate = false;
+            updateDateSuggestions(result);
+        }
+    };
+
+    const onConfirmDelete = (indexToRemove: number) => {
         return () => {
             let result = [...arrayOfDateSuggestions];
             updateDateSuggestions(result.filter((value, index) => index !== indexToRemove));
@@ -101,6 +114,7 @@ export default function Terminfinder() {
         if (!result.some(suggestion => suggestion['selectedStartDate'] === startDatePopUp && suggestion['selectedEndDate'] === endDatePopUp)) {
             result.push({
                 check: 0,
+                deleteCandidate: false,
                 selectedStartDate: startDatePopUp,
                 selectedEndDate: endDatePopUp
             });
@@ -113,14 +127,23 @@ export default function Terminfinder() {
     return (
         <div>
             <Paper className={classes.root}>
-                {sortedArray.map((element, index) => <DateProposal
-                    key={index}
-                    check={element.check}
-                    handleCheck={handleCheck(index)}
-                    selectedStartDate={element.selectedStartDate}
-                    selectedEndDate={element.selectedEndDate}
-                    onDelete={onDelete(index)}
-                />)}
+                {sortedArray.map((element, index) =>
+                    <div>
+                        <DateProposal
+                            key={index}
+                            check={element.check}
+                            handleCheck={handleCheck(index)}
+                            selectedStartDate={element.selectedStartDate}
+                            selectedEndDate={element.selectedEndDate}
+                            onDelete={onDelete(index)}
+                        />
+                        <ConfirmDeleteDialog
+                            open={element.deleteCandidate}
+                            content={"Terminvorschlag wirklich löschen?"}
+                            handleAbort={abortConfirmDelete(index)}
+                            handleDelete={onConfirmDelete(index)}
+                        />
+                    </div>)}
                 <Fab
                     color="primary"
                     aria-label="add"
