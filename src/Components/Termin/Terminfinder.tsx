@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DateProposal from "./DateProposal";
 import NewDateProposalDialog from "./NewDateProposalDialog";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import ResultDialog from "./ResultDialog";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface DateSuggestion {
     check: number
     deleteCandidate: boolean
+    showDetails: boolean
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
 }
@@ -92,6 +94,14 @@ export default function Terminfinder() {
         };
     };
 
+    const handleResultDialog = (index: number) => {
+        return () => {
+            let result = [...arrayOfDateSuggestions];
+            result[index].showDetails = !result[index].showDetails;
+            updateDateSuggestions(result);
+        }
+    };
+
     const handleCheck = (indexToCheck: number) => {
         return () => {
             let result = [...arrayOfDateSuggestions];
@@ -115,6 +125,7 @@ export default function Terminfinder() {
             result.push({
                 check: 0,
                 deleteCandidate: false,
+                showDetails: false,
                 selectedStartDate: startDatePopUp,
                 selectedEndDate: endDatePopUp
             });
@@ -135,10 +146,17 @@ export default function Terminfinder() {
                         selectedStartDate={element.selectedStartDate}
                         selectedEndDate={element.selectedEndDate}
                         onDelete={onDelete(index)}
+                        handleResultDialog={handleResultDialog(index)}
+                    />
+                    <ResultDialog
+                        open={element.showDetails}
+                        date={"Sa. 02.10.20 - Sa. 02.10.20"}
+                        content={"Axel         check       vorher eh in mz"}
+                        handleClose={handleResultDialog(index)}
                     />
                     <ConfirmDeleteDialog
                         open={element.deleteCandidate}
-                        content={"Terminvorschlag wirklich löschen?"}
+                        content={"Terminvorschlag wirklich löschen? Bereits abgegebene Stimmen gehen verloren."}
                         handleAbort={abortConfirmDelete(index)}
                         handleDelete={onConfirmDelete(index)}
                     />

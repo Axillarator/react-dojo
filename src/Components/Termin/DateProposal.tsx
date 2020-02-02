@@ -27,6 +27,7 @@ interface Props {
     check: number
     handleCheck: MouseEventHandler
     onDelete: MouseEventHandler
+    handleResultDialog: MouseEventHandler
 }
 
 export default function DateProposal(props: Props) {
@@ -43,11 +44,13 @@ export default function DateProposal(props: Props) {
                     <Chip
                         className={classes.date}
                         label={props.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + props.selectedEndDate!!.format("dd. DD.MM.YY")}
+                        onClick={props.handleResultDialog}
                     />
                     :
                     <Chip
                         className={classes.date}
                         label={props.selectedStartDate!!.format("dd. DD.MM.YY")}
+                        onClick={props.handleResultDialog}
                     />
                 }
 
