@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
-import {createStyles, makeStyles, Paper, Theme} from "@material-ui/core";
+import {createStyles, makeStyles, Theme} from "@material-ui/core";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import moment from "moment";
 import 'moment/locale/de';
@@ -14,7 +14,7 @@ import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            padding: theme.spacing(3, 2),
+            padding: theme.spacing(1, 1),
         },
         fab: {
             position: 'absolute',
@@ -125,33 +125,31 @@ export default function Terminfinder() {
         (a, b) => a.selectedStartDate!!.diff(b.selectedStartDate!!));
 
     return (
-        <div>
-            <Paper className={classes.root}>
-                {sortedArray.map((element, index) =>
-                    <div>
-                        <DateProposal
-                            key={index}
-                            check={element.check}
-                            handleCheck={handleCheck(index)}
-                            selectedStartDate={element.selectedStartDate}
-                            selectedEndDate={element.selectedEndDate}
-                            onDelete={onDelete(index)}
-                        />
-                        <ConfirmDeleteDialog
-                            open={element.deleteCandidate}
-                            content={"Terminvorschlag wirklich löschen?"}
-                            handleAbort={abortConfirmDelete(index)}
-                            handleDelete={onConfirmDelete(index)}
-                        />
-                    </div>)}
-                <Fab
-                    color="primary"
-                    aria-label="add"
-                    className={classes.fab}
-                    onClick={handlePopUpOpen}>
-                    <AddIcon/>
-                </Fab>
-            </Paper>
+        <div className={classes.root}>
+            {sortedArray.map((element, index) =>
+                <div>
+                    <DateProposal
+                        key={index}
+                        check={element.check}
+                        handleCheck={handleCheck(index)}
+                        selectedStartDate={element.selectedStartDate}
+                        selectedEndDate={element.selectedEndDate}
+                        onDelete={onDelete(index)}
+                    />
+                    <ConfirmDeleteDialog
+                        open={element.deleteCandidate}
+                        content={"Terminvorschlag wirklich löschen?"}
+                        handleAbort={abortConfirmDelete(index)}
+                        handleDelete={onConfirmDelete(index)}
+                    />
+                </div>)}
+            <Fab
+                color="primary"
+                aria-label="add"
+                className={classes.fab}
+                onClick={handlePopUpOpen}>
+                <AddIcon/>
+            </Fab>
             <NewDateProposalDialog
                 open={openPopUp}
                 handleClose={handlePopUpClose}
