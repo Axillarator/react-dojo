@@ -53,8 +53,6 @@ export default function Terminfinder() {
 
 
     const handleStartDatePicker = () => {
-        console.log("handleStartDatePicker");
-
         updateStartDatePicker(!startDatePickerIsOpen);
         if (dayEventPopUp) {
             updateEndDatePopUp(startDatePopUp);
@@ -100,12 +98,14 @@ export default function Terminfinder() {
     const handleAdd = () => {
         setOpenPopUp(false);
         let result = [...arrayOfDateSuggestions];
-        result.push({
-            check: 0,
-            selectedStartDate: startDatePopUp,
-            selectedEndDate: endDatePopUp
-        });
-        updateDateSuggestions(result);
+        if (!result.some(suggestion => suggestion['selectedStartDate'] === startDatePopUp && suggestion['selectedEndDate'] === endDatePopUp)) {
+            result.push({
+                check: 0,
+                selectedStartDate: startDatePopUp,
+                selectedEndDate: endDatePopUp
+            });
+            updateDateSuggestions(result);
+        }
     };
     const sortedArray = arrayOfDateSuggestions.sort(
         (a, b) => a.selectedStartDate!!.diff(b.selectedStartDate!!));
