@@ -7,13 +7,15 @@ import * as React from "react";
 import {MouseEventHandler} from "react";
 
 interface Result {
-
+    user: string,
+    status: number,
+    remark: string
 }
 
 interface Props {
     open: boolean
     date: string
-    content: string
+    content: Result[]
     handleClose: MouseEventHandler
 }
 
@@ -22,7 +24,7 @@ export default function ResultDialog(props: Props) {
         <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">{props.date}</DialogTitle>
             <DialogContent>
-                {props.content}
+                {props.content[0].user + "\t" + props.content[0].status + "\t" + props.content[0].remark}
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleClose} color="primary">

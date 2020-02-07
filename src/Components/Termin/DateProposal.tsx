@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         date: {
             width: '190px',
-            height: '24px'
+            height: '28px'
         }
     }),
 );

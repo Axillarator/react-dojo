@@ -29,11 +29,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface DateSuggestion {
-    check: number
+    id: number
+    status: number
     deleteCandidate: boolean
     showDetails: boolean
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
+    results: Result[]
+}
+
+interface Result {
+    user: string
+    status: number
+    remark: string
 }
 
 export default function Terminfinder() {
@@ -105,7 +113,8 @@ export default function Terminfinder() {
     const handleCheck = (indexToCheck: number) => {
         return () => {
             let result = [...arrayOfDateSuggestions];
-            result[indexToCheck].check = (result[indexToCheck].check + 1) % 3;
+            result[indexToCheck].status = (result[indexToCheck].status + 1) % 3;
+            result[indexToCheck].results[0].status = result[indexToCheck].status
             updateDateSuggestions(result);
         }
     };
@@ -123,11 +132,17 @@ export default function Terminfinder() {
         let result = [...arrayOfDateSuggestions];
         if (!result.some(suggestion => suggestion['selectedStartDate'] === startDatePopUp && suggestion['selectedEndDate'] === endDatePopUp)) {
             result.push({
-                check: 0,
+                id: result.length,
+                status: 0,
                 deleteCandidate: false,
                 showDetails: false,
                 selectedStartDate: startDatePopUp,
-                selectedEndDate: endDatePopUp
+                selectedEndDate: endDatePopUp,
+                results: [{
+                    user: "Axel",
+                    remark: "",
+                    status: 0
+                }]
             });
             updateDateSuggestions(result);
         }
@@ -141,7 +156,7 @@ export default function Terminfinder() {
                 <div>
                     <DateProposal
                         key={index}
-                        check={element.check}
+                        check={element.status}
                         handleCheck={handleCheck(index)}
                         selectedStartDate={element.selectedStartDate}
                         selectedEndDate={element.selectedEndDate}
@@ -150,8 +165,8 @@ export default function Terminfinder() {
                     />
                     <ResultDialog
                         open={element.showDetails}
-                        date={"Sa. 02.10.20 - Sa. 02.10.20"}
-                        content={"Axel         check       vorher eh in mz"}
+                        date={(element.selectedStartDate!! < element.selectedEndDate!!) ? element.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + element.selectedEndDate!!.format("dd. DD.MM.YY") : element.selectedStartDate!!.format("dd. DD.MM.YY")}
+                        content={element.results}
                         handleClose={handleResultDialog(index)}
                     />
                     <ConfirmDeleteDialog
