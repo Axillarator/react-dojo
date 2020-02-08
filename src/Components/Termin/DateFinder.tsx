@@ -185,7 +185,8 @@ export default function DateFinder() {
                         key={index}
                         id={index}
                         onSendInput={onSubmit(index)}
-                        check={element.results[0].statusCode}
+                        statusCode={element.results[0].statusCode}
+                        results={element.results}
                         handleCheck={handleStatusChange(index)}
                         selectedStartDate={element.selectedStartDate}
                         selectedEndDate={element.selectedEndDate}

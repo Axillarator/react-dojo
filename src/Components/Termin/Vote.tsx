@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    check: number
+    statusCode: number
     onClick: MouseEventHandler
 }
 
@@ -26,14 +26,14 @@ export default function Vote(props: Props) {
 
     const classes = useStyles();
 
-    if (props.check === 0) {
+    if (props.statusCode === 0) {
         return (
             <IconButton aria-label="Undecided" onClick={props.onClick} size="small">
                 <CheckBoxOutlineBlankIcon/>
             </IconButton>
         )
     }
-    if (props.check === 1) {
+    if (props.statusCode === 1) {
         return (
             <IconButton aria-label="Yes" onClick={props.onClick} size="small">
                 <CheckBoxIcon
@@ -42,7 +42,7 @@ export default function Vote(props: Props) {
             </IconButton>
         )
     }
-    if (props.check === 2) {
+    if (props.statusCode === 2) {
         return (
             <IconButton aria-label="No" onClick={props.onClick} size="small">
                 <IndeterminateCheckBoxIcon

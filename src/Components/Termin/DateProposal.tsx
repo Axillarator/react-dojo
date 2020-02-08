@@ -5,12 +5,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import * as React from "react";
 import {ChangeEventHandler, MouseEventHandler} from "react";
-
-
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Vote from "./Vote";
 import {createStyles, makeStyles, TextField, Theme} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import {Result} from "./DateFinder";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,7 +24,8 @@ interface Props {
     id: number
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
-    check: number
+    statusCode: number
+    results: Result[]
     handleCheck: MouseEventHandler
     onDelete: MouseEventHandler
     handleResultDialog: MouseEventHandler
@@ -61,12 +61,11 @@ export default function DateProposal(props: Props) {
                         onClick={props.handleResultDialog}
                     />
                 }
-
                 <Typography variant="button">
-                    {props.check}
+                    {props.results.filter(value => value.statusCode === 1).length}
                 </Typography>
                 <Vote
-                    check={props.check}
+                    statusCode={props.statusCode}
                     onClick={props.handleCheck}
                 />
                 <Tooltip title="Notiz hinzufügen">
