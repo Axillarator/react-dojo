@@ -4,7 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from '@material-ui/icons/Delete';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import * as React from "react";
-import {MouseEventHandler, useState} from "react";
+import {ChangeEventHandler, MouseEventHandler} from "react";
 
 
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
@@ -22,20 +22,30 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
+    id: number
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
     check: number
     handleCheck: MouseEventHandler
     onDelete: MouseEventHandler
     handleResultDialog: MouseEventHandler
+    inputValue: string
+    messageVisible: boolean
+    onSetInput: ChangeEventHandler
+    onSendInput: MouseEventHandler
+    onToggleMessage: MouseEventHandler
 }
 
 export default function DateProposal(props: Props) {
 
     const classes = useStyles();
 
-    const [inputValue, setInput] = useState<String>("");
-    const [messageVisible, toggleMessage] = useState<boolean>(false);
+    const catchEnter = (event: any) => {
+        if (event.key === 'Enter') {
+            props.onSendInput(event);
+            event.preventDefault();
+        }
+    };
 
     return (
         <div>
@@ -65,20 +75,22 @@ export default function DateProposal(props: Props) {
                     <IconButton
                         size="small"
                         aria-label="Notiz hinzufügen"
-                        onClick={() => toggleMessage(!messageVisible)}>
+                        onClick={props.onToggleMessage}>
                         <ChatBubbleIcon/>
                     </IconButton>
                 </Tooltip>
-                {messageVisible ?
+                {props.messageVisible ?
                     <TextField
                         placeholder="Notiz"
+                        name={props.id.toString()}
                         margin='dense'
                         autoFocus={true}
                         inputProps={{
                             maxLength: 20
                         }}
-                        value={inputValue}
-                        onChange={e => setInput(e.target.value)}
+                        value={props.inputValue}
+                        onChange={props.onSetInput}
+                        onKeyPress={catchEnter}
                     />
                     :
                     <Tooltip title="Vorschlag entfernen">

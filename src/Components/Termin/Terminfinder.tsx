@@ -33,6 +33,8 @@ interface DateSuggestion {
     status: number
     deleteCandidate: boolean
     showDetails: boolean
+    note: string
+    messageVisible: boolean
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
     results: Result[]
@@ -58,6 +60,29 @@ export default function Terminfinder() {
 
     const [startDatePickerIsOpen, updateStartDatePicker] = useState(false);
     const [endDatePickerIsOpen, updateEndDatePicker] = useState(false);
+
+    const onToggleMessage = (indexToToggle: number) => {
+        return () => {
+            let result = [...arrayOfDateSuggestions];
+            result[indexToToggle].messageVisible = !result[indexToToggle].messageVisible;
+            updateDateSuggestions(result);
+        };
+    };
+
+    const onSetInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+            let result = [...arrayOfDateSuggestions];
+            result[parseInt(event.target.name)].note = event.target.value;
+            updateDateSuggestions(result);
+    };
+
+    const onSubmit = (indexToSend: number) => {
+        return () => {
+            let result = [...arrayOfDateSuggestions];
+            result[indexToSend].results[0].remark = result[indexToSend].note;
+            result[indexToSend].messageVisible = !result[indexToSend].messageVisible;
+            updateDateSuggestions(result);
+        }
+    };
 
     const handleStartDatePicker = () => {
         updateStartDatePicker(!startDatePickerIsOpen);
@@ -114,7 +139,7 @@ export default function Terminfinder() {
         return () => {
             let result = [...arrayOfDateSuggestions];
             result[indexToCheck].status = (result[indexToCheck].status + 1) % 3;
-            result[indexToCheck].results[0].status = result[indexToCheck].status
+            result[indexToCheck].results[0].status = result[indexToCheck].status;
             updateDateSuggestions(result);
         }
     };
@@ -136,6 +161,8 @@ export default function Terminfinder() {
                 status: 0,
                 deleteCandidate: false,
                 showDetails: false,
+                note: "",
+                messageVisible: false,
                 selectedStartDate: startDatePopUp,
                 selectedEndDate: endDatePopUp,
                 results: [{
@@ -156,20 +183,28 @@ export default function Terminfinder() {
                 <div>
                     <DateProposal
                         key={index}
+                        id={index}
+                        onSendInput={onSubmit(index)}
                         check={element.status}
                         handleCheck={handleCheck(index)}
                         selectedStartDate={element.selectedStartDate}
                         selectedEndDate={element.selectedEndDate}
                         onDelete={onDelete(index)}
                         handleResultDialog={handleResultDialog(index)}
+                        inputValue={element.note}
+                        onSetInput={onSetInput}
+                        messageVisible={element.messageVisible}
+                        onToggleMessage={onToggleMessage(index)}
                     />
                     <ResultDialog
+                        key={index}
                         open={element.showDetails}
                         date={(element.selectedStartDate!! < element.selectedEndDate!!) ? element.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + element.selectedEndDate!!.format("dd. DD.MM.YY") : element.selectedStartDate!!.format("dd. DD.MM.YY")}
                         content={element.results}
                         handleClose={handleResultDialog(index)}
                     />
                     <ConfirmDeleteDialog
+                        key={index}
                         open={element.deleteCandidate}
                         content={"Terminvorschlag wirklich löschen? Bereits abgegebene Stimmen gehen verloren."}
                         handleAbort={abortConfirmDelete(index)}
