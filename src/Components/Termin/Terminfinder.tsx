@@ -70,9 +70,9 @@ export default function Terminfinder() {
     };
 
     const onSetInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-            let result = [...arrayOfDateSuggestions];
-            result[parseInt(event.target.name)].note = event.target.value;
-            updateDateSuggestions(result);
+        let result = [...arrayOfDateSuggestions];
+        result[parseInt(event.target.name)].note = event.target.value;
+        updateDateSuggestions(result);
     };
 
     const onSubmit = (indexToSend: number) => {
@@ -169,7 +169,17 @@ export default function Terminfinder() {
                     user: "Axel",
                     remark: "",
                     status: 0
-                }]
+                },
+                    {
+                        user: "Basti",
+                        remark: "",
+                        status: 0
+                    },
+                    {
+                        user: "Gereon",
+                        remark: "",
+                        status: 0
+                    }]
             });
             updateDateSuggestions(result);
         }
