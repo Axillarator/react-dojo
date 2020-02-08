@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface DateSuggestion {
     id: number
-    status: number
+    status: Status[]
     deleteCandidate: boolean
     showDetails: boolean
     note: string
@@ -40,9 +40,14 @@ interface DateSuggestion {
     results: Result[]
 }
 
+interface Status {
+    user: string
+    statusCode: number
+}
+
 interface Result {
     user: string
-    status: number
+    statusCode: number
     remark: string
 }
 
@@ -138,8 +143,8 @@ export default function Terminfinder() {
     const handleCheck = (indexToCheck: number) => {
         return () => {
             let result = [...arrayOfDateSuggestions];
-            result[indexToCheck].status = (result[indexToCheck].status + 1) % 3;
-            result[indexToCheck].results[0].status = result[indexToCheck].status;
+            result[indexToCheck].status[0].statusCode = (result[indexToCheck].status[0].statusCode + 1) % 3;
+            result[indexToCheck].results[0].statusCode = result[indexToCheck].status[0].statusCode;
             updateDateSuggestions(result);
         }
     };
@@ -158,7 +163,10 @@ export default function Terminfinder() {
         if (!result.some(suggestion => suggestion['selectedStartDate'] === startDatePopUp && suggestion['selectedEndDate'] === endDatePopUp)) {
             result.push({
                 id: result.length,
-                status: 0,
+                status: [{
+                    user: "Axel",
+                    statusCode: 0
+                }],
                 deleteCandidate: false,
                 showDetails: false,
                 note: "",
@@ -168,17 +176,17 @@ export default function Terminfinder() {
                 results: [{
                     user: "Axel",
                     remark: "",
-                    status: 0
+                    statusCode: 0
                 },
                     {
                         user: "Basti",
                         remark: "",
-                        status: 0
+                        statusCode: 0
                     },
                     {
                         user: "Gereon",
                         remark: "",
-                        status: 0
+                        statusCode: 0
                     }]
             });
             updateDateSuggestions(result);
@@ -195,7 +203,7 @@ export default function Terminfinder() {
                         key={index}
                         id={index}
                         onSendInput={onSubmit(index)}
-                        check={element.status}
+                        check={element.status[0].statusCode}
                         handleCheck={handleCheck(index)}
                         selectedStartDate={element.selectedStartDate}
                         selectedEndDate={element.selectedEndDate}

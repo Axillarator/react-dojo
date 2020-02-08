@@ -12,7 +12,7 @@ import TableCell from "@material-ui/core/TableCell";
 
 interface Result {
     user: string,
-    status: number,
+    statusCode: number,
     remark: string
 }
 
@@ -24,6 +24,15 @@ interface Props {
 }
 
 export default function ResultDialog(props: Props) {
+
+    const getStatusSymbol = (statusCode: number) => {
+        switch (statusCode) {
+            case 0: return <TableCell align="right"> </TableCell>;
+            case 1: return <TableCell align="right">&#10004;</TableCell>;
+            case 2: return <TableCell align="right">&#8722;</TableCell>;
+        }
+    };
+
     return (
         <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">{props.date}</DialogTitle>
@@ -33,7 +42,7 @@ export default function ResultDialog(props: Props) {
                         {props.content.map(row => (
                             <TableRow key={row.user}>
                                 <TableCell align="left">{row.user}</TableCell>
-                                <TableCell align="right">{row.status}</TableCell>
+                                {getStatusSymbol(row.statusCode)}
                                 <TableCell align="right">{row.remark}</TableCell>
                             </TableRow>
                         ))}
