@@ -43,7 +43,7 @@ export default function ResultDialog(props: Props) {
                             <TableRow key={row.user}>
                                 <TableCell align="left">{row.user}</TableCell>
                                 {getStatusSymbol(row.statusCode)}
-                                <TableCell align="right">{row.remark}</TableCell>
+                                <TableCell align="left">{row.remark}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
