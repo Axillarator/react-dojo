@@ -11,7 +11,6 @@ import NewDateProposalDialog from "./NewDateProposalDialog";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import ResultDialog from "./ResultDialog";
 
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -51,7 +50,7 @@ interface Result {
     remark: string
 }
 
-export default function Terminfinder() {
+export default function DateFinder() {
     moment.locale('de');
 
     const classes = useStyles();
@@ -63,8 +62,8 @@ export default function Terminfinder() {
     const [endDatePopUp, updateEndDatePopUp] = useState<MaterialUiPickersDate>(moment());
     const [dayEventPopUp, toggleDayEventPopUp] = useState<boolean>(false);
 
-    const [startDatePickerIsOpen, updateStartDatePicker] = useState(false);
-    const [endDatePickerIsOpen, updateEndDatePicker] = useState(false);
+    const [openStartDatePicker, updateStartDatePicker] = useState(false);
+    const [openEndDatePicker, updateEndDatePicker] = useState(false);
 
     const onToggleMessage = (indexToToggle: number) => {
         return () => {
@@ -90,14 +89,14 @@ export default function Terminfinder() {
     };
 
     const handleStartDatePicker = () => {
-        updateStartDatePicker(!startDatePickerIsOpen);
+        updateStartDatePicker(!openStartDatePicker);
         if (dayEventPopUp) {
             updateEndDatePopUp(startDatePopUp);
         }
     };
 
     const handleEndDatePicker = () => {
-        updateEndDatePicker(!endDatePickerIsOpen);
+        updateEndDatePicker(!openEndDatePicker);
     };
 
     const handleDayEventToggle = () => {
@@ -242,11 +241,11 @@ export default function Terminfinder() {
                 handleAdd={handleAdd}
                 selectedStartDate={startDatePopUp}
                 handleStartDateChange={updateStartDatePopUp}
-                startDatePickerIsOpen={startDatePickerIsOpen}
+                startDatePickerIsOpen={openStartDatePicker}
                 handleStartDatePicker={handleStartDatePicker}
                 selectedEndDate={endDatePopUp}
                 handleEndDateChange={updateEndDatePopUp}
-                endDatePickerIsOpen={endDatePickerIsOpen}
+                endDatePickerIsOpen={openEndDatePicker}
                 handleEndDatePicker={handleEndDatePicker}
                 handleDayEvent={handleDayEventToggle}
                 dayEvent={dayEventPopUp}

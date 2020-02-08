@@ -40,16 +40,14 @@ export default function DateProposal(props: Props) {
 
     const classes = useStyles();
 
-    const catchEnter = (event: any) => {
-        if (event.key === 'Enter') {
-            props.onSendInput(event);
-            event.preventDefault();
-        }
+    const submit = (event: any) =>{
+        event.preventDefault();
+        props.onSendInput(event);
     };
 
     return (
         <div>
-            <form>
+            <form onSubmit={submit}>
                 {(props.selectedStartDate!! < props.selectedEndDate!!) ?
                     <Chip
                         className={classes.date}
@@ -90,7 +88,6 @@ export default function DateProposal(props: Props) {
                         }}
                         value={props.inputValue}
                         onChange={props.onSetInput}
-                        onKeyPress={catchEnter}
                     />
                     :
                     <Tooltip title="Vorschlag entfernen">
