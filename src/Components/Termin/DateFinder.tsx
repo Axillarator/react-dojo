@@ -28,23 +28,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface DateSuggestion {
-    id: number
-    status: Status[]
-    deleteCandidate: boolean
-    showDetails: boolean
-    note: string
-    messageVisible: boolean
     selectedStartDate: MaterialUiPickersDate
     selectedEndDate: MaterialUiPickersDate
     results: Result[]
+    note: string
+    showDetails: boolean
+    messageVisible: boolean
+    deleteCandidate: boolean
 }
 
-interface Status {
-    user: string
-    statusCode: number
-}
-
-interface Result {
+export interface Result {
     user: string
     statusCode: number
     remark: string
@@ -139,21 +132,16 @@ export default function DateFinder() {
         }
     };
 
-    const handleCheck = (indexToCheck: number) => {
+    const handleStatusChange = (indexToCheck: number) => {
         return () => {
             let result = [...arrayOfDateSuggestions];
-            result[indexToCheck].status[0].statusCode = (result[indexToCheck].status[0].statusCode + 1) % 3;
-            result[indexToCheck].results[0].statusCode = result[indexToCheck].status[0].statusCode;
+            result[indexToCheck].results[0].statusCode = (result[indexToCheck].results[0].statusCode + 1) % 3;
             updateDateSuggestions(result);
         }
     };
 
-    const handlePopUpOpen = () => {
-        setOpenPopUp(true);
-    };
-
-    const handlePopUpClose = () => {
-        setOpenPopUp(false);
+    const handleProposalPopUp = () => {
+        setOpenPopUp(!openPopUp);
     };
 
     const handleAdd = () => {
@@ -161,11 +149,6 @@ export default function DateFinder() {
         let result = [...arrayOfDateSuggestions];
         if (!result.some(suggestion => suggestion['selectedStartDate'] === startDatePopUp && suggestion['selectedEndDate'] === endDatePopUp)) {
             result.push({
-                id: result.length,
-                status: [{
-                    user: "A",
-                    statusCode: 0
-                }],
                 deleteCandidate: false,
                 showDetails: false,
                 note: "",
@@ -202,8 +185,8 @@ export default function DateFinder() {
                         key={index}
                         id={index}
                         onSendInput={onSubmit(index)}
-                        check={element.status[0].statusCode}
-                        handleCheck={handleCheck(index)}
+                        check={element.results[0].statusCode}
+                        handleCheck={handleStatusChange(index)}
                         selectedStartDate={element.selectedStartDate}
                         selectedEndDate={element.selectedEndDate}
                         onDelete={onDelete(index)}
@@ -232,12 +215,12 @@ export default function DateFinder() {
                 color="primary"
                 aria-label="add"
                 className={classes.fab}
-                onClick={handlePopUpOpen}>
+                onClick={handleProposalPopUp}>
                 <AddIcon/>
             </Fab>
             <NewDateProposalDialog
                 open={openPopUp}
-                handleClose={handlePopUpClose}
+                handleClose={handleProposalPopUp}
                 handleAdd={handleAdd}
                 selectedStartDate={startDatePopUp}
                 handleStartDateChange={updateStartDatePopUp}

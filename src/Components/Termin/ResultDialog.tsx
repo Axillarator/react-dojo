@@ -9,12 +9,7 @@ import {Table} from "@material-ui/core";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-
-interface Result {
-    user: string,
-    statusCode: number,
-    remark: string
-}
+import {Result} from "./DateFinder";
 
 interface Props {
     open: boolean
