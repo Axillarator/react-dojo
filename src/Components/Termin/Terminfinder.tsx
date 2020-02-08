@@ -164,7 +164,7 @@ export default function Terminfinder() {
             result.push({
                 id: result.length,
                 status: [{
-                    user: "Axel",
+                    user: "A",
                     statusCode: 0
                 }],
                 deleteCandidate: false,
@@ -174,17 +174,17 @@ export default function Terminfinder() {
                 selectedStartDate: startDatePopUp,
                 selectedEndDate: endDatePopUp,
                 results: [{
-                    user: "Axel",
+                    user: "A",
                     remark: "",
                     statusCode: 0
                 },
                     {
-                        user: "Basti",
+                        user: "B",
                         remark: "",
                         statusCode: 0
                     },
                     {
-                        user: "Gereon",
+                        user: "G",
                         remark: "",
                         statusCode: 0
                     }]
