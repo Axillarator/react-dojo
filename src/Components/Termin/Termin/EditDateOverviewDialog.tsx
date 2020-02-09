@@ -52,7 +52,7 @@ export default function EditDateOverviewDialog(props: Props) {
                         onClose={props.handleStartDatePicker}
                         value={props.selectedStartDate}
                         onChange={props.handleStartDateChange}
-                        format={"dd. DD.MM.YYYY"}
+                        format={"dd DD.MM.YYYY"}
                         label="Anreisetag"
                     />
                     <br/>
@@ -69,7 +69,7 @@ export default function EditDateOverviewDialog(props: Props) {
                         onClose={props.handleEndDatePicker}
                         value={props.selectedEndDate}
                         onChange={props.handleEndDateChange}
-                        format={"dd. DD.MM.YYYY"}
+                        format={"dd DD.MM.YYYY"}
                         label="Abreisetag"
                         minDate={props.selectedStartDate}
                         minDateMessage={"Abreise- vor Anreisetag!"}

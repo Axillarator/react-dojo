@@ -40,12 +40,24 @@ export default function DateOverview() {
         endDate: moment(),
         endDescription: ""
     });
-    const [menuAnchorElement, setMenuAnchorElement] = React.useState<null | HTMLElement>(null);
+
+    const handleSetEventDate = () => {
+        setDateExists(true);
+        toggleShowEditDateDialog(false);
+        const result = {...eventDate};
+        result.startDate = startDatePopUp;
+        result.startDescription = startDescriptionPopUp;
+        result.endDate = endDatePopUp;
+        result.endDescription = endDescriptionPopUp;
+        setEventDate(result);
+    };
 
     const [startDatePopUp, updateStartDatePopUp] = useState<MaterialUiPickersDate>(moment());
     const [endDatePopUp, updateEndDatePopUp] = useState<MaterialUiPickersDate>(moment());
     const [startDescriptionPopUp, setStartDescriptionPopUp] = useState<string>("");
     const [endDescriptionPopUp, setEndDescriptionPopUp] = useState<string>("");
+    const [openStartDatePicker, updateStartDatePicker] = useState(false);
+    const [openEndDatePicker, updateEndDatePicker] = useState(false);
 
     const onSetStartDateDescriptionInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setStartDescriptionPopUp(event.target.value);
@@ -55,8 +67,7 @@ export default function DateOverview() {
         setEndDescriptionPopUp(event.target.value);
     };
 
-    const [openStartDatePicker, updateStartDatePicker] = useState(false);
-    const [openEndDatePicker, updateEndDatePicker] = useState(false);
+    const [menuAnchorElement, setMenuAnchorElement] = React.useState<null | HTMLElement>(null);
 
     const handleMenuClose = () => {
         setMenuAnchorElement(null);
@@ -76,18 +87,6 @@ export default function DateOverview() {
         setDateExists(false);
         setMenuAnchorElement(null);
     };
-
-    const handleSetEventDate = () => {
-        setDateExists(true);
-        toggleShowEditDateDialog(false);
-        const result = {...eventDate};
-        result.startDate = startDatePopUp;
-        result.startDescription = startDescriptionPopUp;
-        result.endDate = endDatePopUp;
-        result.endDescription = endDescriptionPopUp;
-        setEventDate(result);
-    };
-
 
     return (
         <div className={classes.root}>
@@ -112,7 +111,7 @@ export default function DateOverview() {
                     <Stepper orientation="vertical">
                         <Step active={true}>
                             <StepLabel StepIconComponent={EventIcon}>
-                                Start: {eventDate.startDate!!.format("dd. DD.MM.YYYY")}
+                                Start: {eventDate.startDate!!.format("dd DD.MM.YYYY")}
                             </StepLabel>
                             <StepContent>
                                 {eventDate.startDescription}
@@ -120,14 +119,13 @@ export default function DateOverview() {
                         </Step>
                         <Step active={true}>
                             <StepLabel StepIconComponent={EventIcon}>
-                                End: {eventDate.endDate!!.format("dd. DD.MM.YYYY")}
+                                End: {eventDate.endDate!!.format("dd DD.MM.YYYY")}
                             </StepLabel>
                             <StepContent>
                                 {eventDate.endDescription}
                             </StepContent>
                         </Step>
                     </Stepper>
-
                 </div>}
                 <EditDateOverviewDialog
                     open={showEditDateDialog}
