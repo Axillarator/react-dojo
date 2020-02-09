@@ -1,6 +1,6 @@
 import * as React from "react";
-import {MouseEventHandler} from "react";
-import {createStyles, makeStyles, Theme} from "@material-ui/core";
+import {ChangeEventHandler, MouseEventHandler} from "react";
+import {createStyles, makeStyles, TextField, Theme} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -30,6 +30,11 @@ interface Props {
     handleEndDateChange: (date: MaterialUiPickersDate) => void
     endDatePickerIsOpen: boolean
     handleEndDatePicker: () => void
+    inputValueStartDateDescription: string
+    handleInputValueStartDateChange: ChangeEventHandler
+    inputValueEndDateDescription: string
+    handleInputValueEndDateChange: ChangeEventHandler
+
 }
 
 export default function EditDateOverviewDialog(props: Props) {
@@ -37,7 +42,7 @@ export default function EditDateOverviewDialog(props: Props) {
 
     return (
         <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Neuer Terminvorschlag</DialogTitle>
+            <DialogTitle id="form-dialog-title">Eventtermin festlegen</DialogTitle>
             <DialogContent>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
                     <DatePicker
@@ -50,6 +55,14 @@ export default function EditDateOverviewDialog(props: Props) {
                         format={"dd. DD.MM.YYYY"}
                         label="Anreisetag"
                     />
+                    <br/>
+                    <TextField
+                        placeholder="Weitere Infos zum Anreisetermin"
+                        multiline
+                        value={props.inputValueStartDateDescription}
+                        onChange={props.handleInputValueStartDateChange}
+                    />
+                    <br/>
                     <DatePicker
                         open={props.endDatePickerIsOpen}
                         onOpen={props.handleEndDatePicker}
@@ -60,6 +73,13 @@ export default function EditDateOverviewDialog(props: Props) {
                         label="Abreisetag"
                         minDate={props.selectedStartDate}
                         minDateMessage={"Abreise- vor Anreisetag!"}
+                    />
+                    <br/>
+                    <TextField
+                        placeholder="Weitere Infos zum Abreisetermin"
+                        multiline
+                        value={props.inputValueEndDateDescription}
+                        onChange={props.handleInputValueEndDateChange}
                     />
                 </MuiPickersUtilsProvider>
             </DialogContent>

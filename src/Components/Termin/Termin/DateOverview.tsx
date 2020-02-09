@@ -44,6 +44,16 @@ export default function DateOverview() {
 
     const [startDatePopUp, updateStartDatePopUp] = useState<MaterialUiPickersDate>(moment());
     const [endDatePopUp, updateEndDatePopUp] = useState<MaterialUiPickersDate>(moment());
+    const [startDescriptionPopUp, setStartDescriptionPopUp] = useState<string>("");
+    const [endDescriptionPopUp, setEndDescriptionPopUp] = useState<string>("");
+
+    const onSetStartDateDescriptionInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setStartDescriptionPopUp(event.target.value);
+    };
+
+    const onSetEndDateDescriptionInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEndDescriptionPopUp(event.target.value);
+    };
 
     const [openStartDatePicker, updateStartDatePicker] = useState(false);
     const [openEndDatePicker, updateEndDatePicker] = useState(false);
@@ -72,7 +82,9 @@ export default function DateOverview() {
         toggleShowEditDateDialog(false);
         const result = {...eventDate};
         result.startDate = startDatePopUp;
+        result.startDescription = startDescriptionPopUp;
         result.endDate = endDatePopUp;
+        result.endDescription = endDescriptionPopUp;
         setEventDate(result);
     };
 
@@ -133,6 +145,10 @@ export default function DateOverview() {
                     handleEndDatePicker={() => {
                         updateEndDatePicker(!openEndDatePicker)
                     }}
+                    inputValueStartDateDescription={startDescriptionPopUp}
+                    handleInputValueStartDateChange={onSetStartDateDescriptionInput}
+                    inputValueEndDateDescription={endDescriptionPopUp}
+                    handleInputValueEndDateChange={onSetEndDateDescriptionInput}
                 />
         </div>
     )
