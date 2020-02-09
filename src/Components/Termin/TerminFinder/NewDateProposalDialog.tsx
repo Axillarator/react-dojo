@@ -61,7 +61,7 @@ export default function NewDateProposalDialog(props: Props) {
                         onClose={props.handleStartDatePicker}
                         value={props.selectedStartDate}
                         onChange={props.handleStartDateChange}
-                        format={"dd. DD.MM.YYYY"}
+                        format={"dd DD.MM.YYYY"}
                         label="Anreisetag"
                     />
                     <DatePicker
@@ -70,7 +70,7 @@ export default function NewDateProposalDialog(props: Props) {
                         onClose={props.handleEndDatePicker}
                         value={props.selectedEndDate}
                         onChange={props.handleEndDateChange}
-                        format={"dd. DD.MM.YYYY"}
+                        format={"dd DD.MM.YYYY"}
                         label="Abreisetag"
                         minDate={props.selectedStartDate}
                         minDateMessage={"Abreise- vor Anreisetag!"}

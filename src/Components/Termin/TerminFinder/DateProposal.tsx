@@ -51,13 +51,13 @@ export default function DateProposal(props: Props) {
                 {(props.selectedStartDate!! < props.selectedEndDate!!) ?
                     <Chip
                         className={classes.date}
-                        label={props.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + props.selectedEndDate!!.format("dd. DD.MM.YY")}
+                        label={props.selectedStartDate!!.format("dd DD.MM.YY") + " - " + props.selectedEndDate!!.format("dd DD.MM.YY")}
                         onClick={props.handleResultDialog}
                     />
                     :
                     <Chip
                         className={classes.date}
-                        label={props.selectedStartDate!!.format("dd. DD.MM.YY")}
+                        label={props.selectedStartDate!!.format("dd DD.MM.YY")}
                         onClick={props.handleResultDialog}
                     />
                 }

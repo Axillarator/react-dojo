@@ -200,7 +200,10 @@ export default function DateFinder() {
                     <ResultDialog
                         key={index}
                         open={element.showDetails}
-                        date={(element.selectedStartDate!! < element.selectedEndDate!!) ? element.selectedStartDate!!.format("dd. DD.MM.YY") + " - " + element.selectedEndDate!!.format("dd. DD.MM.YY") : element.selectedStartDate!!.format("dd. DD.MM.YY")}
+                        date={(element.selectedStartDate!! < element.selectedEndDate!!) ?
+                            element.selectedStartDate!!.format("dd DD.MM.YY")
+                            + " - " + element.selectedEndDate!!.format("dd DD.MM.YY") :
+                            element.selectedStartDate!!.format("dd DD.MM.YY")}
                         content={element.results}
                         handleClose={handleResultDialog(index)}
                     />
